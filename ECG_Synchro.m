@@ -37,7 +37,7 @@
 
 N_SujMax    = size(R,1); % Number of subjects
 N_Scenario  = size(R,2); % Number of scenario
-Delta       = 30; % Time in millisecond in which R peak are considerend coincident.
+Delta       = 20; % Time in millisecond in which R peak are considerend coincident.
 N_Perm      = 100000; % Number of permutation
 
 
