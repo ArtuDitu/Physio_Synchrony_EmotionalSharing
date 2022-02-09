@@ -11,6 +11,7 @@ segments_info = readtable('segments_info.xlsx');
 % conditions order: RS1, Emotional, Neutral
 % role order: speaker, listener
 Rpeaks = cell(27,3,2);
+HR = zeros(27,3,2);
 
 % filter, epoch,, calculate peaks, and combine all data
 pairCount = 0;
@@ -33,6 +34,10 @@ for file = 1:size(list_of_files,1)
     [pks_RS1, locs_RS1] = findpeaks(d_RS1,'MinPeakHeight',max(d_RS1)/2,'MinPeakDistance',125);
     [pks_sharing1, locs_sharing1] = findpeaks(d_sharing1,'MinPeakHeight',max(d_sharing1)/2,'MinPeakDistance',125);
     [pks_sharing2, locs_sharing2] = findpeaks(d_sharing2,'MinPeakHeight',max(d_sharing2)/2,'MinPeakDistance',125);
+    
+    %calc HR
+   
+    
     
     % combine all data
     if char(table2array(segments_info(file, 3))) == 'S'
@@ -89,3 +94,18 @@ d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
 %file 54
 d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
 d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1);
+%%
+% run synchro script 
+ECG_Synchro;
+
+emotional = Coincidence(:,:,2);
+emotional = emotional(EyeMat);
+
+neutral = Coincidence(:,:,3);
+neutral = neutral(EyeMat);
+
+[h,p,ci,stats] = ttest(emotional, neutral);
+
+
+
+
