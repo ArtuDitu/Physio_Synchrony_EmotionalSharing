@@ -36,8 +36,9 @@ for file = 1:size(list_of_files,1)
     [pks_sharing2, locs_sharing2] = findpeaks(d_sharing2,'MinPeakHeight',max(d_sharing2)/2,'MinPeakDistance',125);
     
     %calc HR
-   
-    
+    HR_RS1 = size(locs_RS1,1)/(size(d_RS1,1)/30000);
+    HR_sharing1 = size(locs_sharing1,1)/(size( d_sharing1,1)/30000);
+    HR_sharing2 = size(locs_sharing2,1)/(size( d_sharing2,1)/30000);
     
     % combine all data
     if char(table2array(segments_info(file, 3))) == 'S'
