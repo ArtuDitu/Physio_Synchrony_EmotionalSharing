@@ -43,32 +43,32 @@ for file = 1:size(list_of_files,1)
     % combine all data
     if char(table2array(segments_info(file, 3))) == 'S'
         Rpeaks(pairCount, 1, 1) = {locs_RS1'/500};
-        HR(pairCount,1,1) = HR_RS1;
+        HR(pairCount,1,1) = size(cell2mat(R(pairCount,1,1)),2)/(size(d_RS1,1)/30000);
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 1) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing2'/500};
-            HR(pairCount,2,1) = HR_sharing1;
-            HR(pairCount,3,1) = HR_sharing2;
+            HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing1,1)/30000);
+            HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing2,1)/30000);
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 1) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing1'/500};
-            HR(pairCount,2,1) = HR_sharing2;
-            HR(pairCount,3,1) = HR_sharing1;
+            HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing2,1)/30000);
+            HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing1,1)/30000);
         end
         
     elseif char(table2array(segments_info(file, 3))) == 'L'
         Rpeaks(pairCount, 1, 2) = {locs_RS1'/500};
-        HR(pairCount,1,2) = HR_RS1;
+         HR(pairCount,1,2) = size(cell2mat(R(pairCount,1,2)),2)/(size(d_RS1,1)/30000);
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 2) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing2'/500};
-            HR(pairCount,2,2) = HR_sharing1;
-            HR(pairCount,3,2) = HR_sharing2;
+            HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing1,1)/30000);
+            HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing2,1)/30000);
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 2) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing1'/500};
-            HR(pairCount,2,1) = HR_sharing2;
-            HR(pairCount,3,1) = HR_sharing1;
+            HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing2,1)/30000);
+            HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing1,1)/30000);
         end
         
     end
