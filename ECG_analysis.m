@@ -30,7 +30,7 @@ for file = 1:size(list_of_files,1)
     d_sharing1 = d(table2array(segments_info(file,6)):table2array(segments_info(file,7)));
     d_sharing2 = d(table2array(segments_info(file,11)):table2array(segments_info(file,12)));
     
-    % find peaks 
+    % find peaks
     [pks_RS1, locs_RS1] = findpeaks(d_RS1,'MinPeakHeight',max(d_RS1)/2,'MinPeakDistance',125);
     [pks_sharing1, locs_sharing1] = findpeaks(d_sharing1,'MinPeakHeight',max(d_sharing1)/2,'MinPeakDistance',125);
     [pks_sharing2, locs_sharing2] = findpeaks(d_sharing2,'MinPeakHeight',max(d_sharing2)/2,'MinPeakDistance',125);
@@ -43,22 +43,32 @@ for file = 1:size(list_of_files,1)
     % combine all data
     if char(table2array(segments_info(file, 3))) == 'S'
         Rpeaks(pairCount, 1, 1) = {locs_RS1'/500};
+        HR(pairCount,1,1) = HR_RS1;
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 1) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing2'/500};
+            HR(pairCount,2,1) = HR_sharing1;
+            HR(pairCount,3,1) = HR_sharing2;
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 1) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing1'/500};
+            HR(pairCount,2,1) = HR_sharing2;
+            HR(pairCount,3,1) = HR_sharing1;
         end
         
     elseif char(table2array(segments_info(file, 3))) == 'L'
         Rpeaks(pairCount, 1, 2) = {locs_RS1'/500};
+        HR(pairCount,1,2) = HR_RS1;
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 2) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing2'/500};
+            HR(pairCount,2,2) = HR_sharing1;
+            HR(pairCount,3,2) = HR_sharing2;
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 2) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing1'/500};
+            HR(pairCount,2,1) = HR_sharing2;
+            HR(pairCount,3,1) = HR_sharing1;
         end
         
     end
