@@ -13,6 +13,10 @@ segments_info = readtable('segments_info.xlsx');
 Rpeaks = cell(27,3,2);
 HR = zeros(27,3,2);
 
+RS1_size = [];
+sharing1_size = [];
+sharing2_size =[];
+
 % filter, epoch,, calculate peaks, and combine all data
 pairCount = 0;
 for file = 1:size(list_of_files,1)
@@ -30,6 +34,40 @@ for file = 1:size(list_of_files,1)
     d_sharing1 = d(table2array(segments_info(file,6)):table2array(segments_info(file,7)));
     d_sharing2 = d(table2array(segments_info(file,11)):table2array(segments_info(file,12)));
     
+    if file == 3
+        d_sharing2 = [d_sharing2(1:51050); d_sharing2(51890:end)];
+    elseif file == 13
+        d_sharing2 = [d_sharing2(1:96988); d_sharing2(100900:128700); d_sharing2(129600:end)];
+    elseif  file == 29
+        d_RS1 = [d_RS1(1:121000); d_RS1(134500:end)];
+    elseif file == 33
+        d_sharing2 = d_sharing2(d_sharing2<2 & d_sharing2>-2);
+    elseif file == 36
+        d_RS1 = d_RS1(d_RS1<1 & d_RS1>-1.5);
+    elseif file == 37
+        d_sharing2 = d_sharing2(d_sharing2<1.8);
+    elseif file == 45
+        d_sharing1 = d_sharing1(d_sharing1<1.5 & d_sharing1>-1.5);
+        d_sharing2 = d_sharing2(d_sharing2<2 & d_sharing2>-2);
+    elseif file == 51
+        d_RS1 = d_RS1(d_RS1<2 & d_RS1>-2);
+    elseif file == 53
+        d_sharing1 = d_sharing1(d_sharing1<1.5 & d_sharing1>-1.5);
+        d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1.5);
+    elseif file == 38
+        d_sharing2 = d_sharing2(d_sharing2<1.5 & d_sharing2>-1.5);
+    elseif file == 43
+        d_sharing2 = d_sharing2(d_sharing2<1.5 & d_sharing2>-1.5);
+    elseif file == 49
+        d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
+    elseif file == 54
+        d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
+        d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1);   
+    end
+    
+    
+    
+    
     % find peaks
     [pks_RS1, locs_RS1] = findpeaks(d_RS1,'MinPeakHeight',max(d_RS1)/2,'MinPeakDistance',125);
     [pks_sharing1, locs_sharing1] = findpeaks(d_sharing1,'MinPeakHeight',max(d_sharing1)/2,'MinPeakDistance',125);
@@ -43,70 +81,39 @@ for file = 1:size(list_of_files,1)
     % combine all data
     if char(table2array(segments_info(file, 3))) == 'S'
         Rpeaks(pairCount, 1, 1) = {locs_RS1'/500};
-        HR(pairCount,1,1) = size(cell2mat(R(pairCount,1,1)),2)/(size(d_RS1,1)/30000);
+        %HR(pairCount,1,1) = size(cell2mat(R(pairCount,1,1)),2)/(size(d_RS1,1)/30000);
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 1) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing2'/500};
-            HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing1,1)/30000);
-            HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing2,1)/30000);
+            %HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing1,1)/30000);
+            %HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing2,1)/30000);
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 1) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 1) = {locs_sharing1'/500};
-            HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing2,1)/30000);
-            HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing1,1)/30000);
+            %HR(pairCount,2,1) = size(cell2mat(R(pairCount,2,1)),2)/(size(d_sharing2,1)/30000);
+            %HR(pairCount,3,1) = size(cell2mat(R(pairCount,3,1)),2)/(size(d_sharing1,1)/30000);
         end
         
     elseif char(table2array(segments_info(file, 3))) == 'L'
         Rpeaks(pairCount, 1, 2) = {locs_RS1'/500};
-         HR(pairCount,1,2) = size(cell2mat(R(pairCount,1,2)),2)/(size(d_RS1,1)/30000);
+        %HR(pairCount,1,2) = size(cell2mat(R(pairCount,1,2)),2)/(size(d_RS1,1)/30000);
         if char(table2array(segments_info(file, 2))) == 'E'
             Rpeaks(pairCount, 2, 2) = {locs_sharing1'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing2'/500};
-            HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing1,1)/30000);
-            HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing2,1)/30000);
+            %HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing1,1)/30000);
+            %HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing2,1)/30000);
         elseif char(table2array(segments_info(file, 2))) == 'N'
             Rpeaks(pairCount, 2, 2) = {locs_sharing2'/500};
             Rpeaks(pairCount, 3, 2) = {locs_sharing1'/500};
-            HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing2,1)/30000);
-            HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing1,1)/30000);
+            %HR(pairCount,2,2) = size(cell2mat(R(pairCount,2,2)),2)/(size(d_sharing2,1)/30000);
+            %HR(pairCount,3,2) = size(cell2mat(R(pairCount,3,2)),2)/(size(d_sharing1,1)/30000);
         end
         
     end
 end
 
-%% manual cleaning of noisy parts
-
-%file 3
-d_sharing2 = [d_sharing2(1:51050); d_sharing2(51890:end)];
-%file 13
-d_sharing2 = [d_sharing2(1:96988); d_sharing2(100900:128700); d_sharing2(129600:end)];
-% file 29
-d_RS1 = [d_RS1(1:121000); d_RS1(134500:end)];
-%file 33
-d_sharing2 = d_sharing2(d_sharing2<2 & d_sharing2>-2);
-%file 36
-d_RS1 = d_RS1(d_RS1<1 & d_RS1>-1.5);
-%file 37
-d_sharing2 = d_sharing2(d_sharing2<1.8);
-%file 45
-d_sharing1 = d_sharing1(d_sharing1<1.5 & d_sharing1>-1.5);
-d_sharing2 = d_sharing2(d_sharing2<2 & d_sharing2>-2);
-% file 51
-d_RS1 = d_RS1(d_RS1<2 & d_RS1>-2);
-%file 53
-d_sharing1 = d_sharing1(d_sharing1<1.5 & d_sharing1>-1.5);
-d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1.5);
-%file 38
-d_sharing2 = d_sharing2(d_sharing2<1.5 & d_sharing2>-1.5);
-% file 43
-d_sharing2 = d_sharing2(d_sharing2<1.5 & d_sharing2>-1.5);
-%file 49
-d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
-%file 54
-d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
-d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1);
 %%
-% run synchro script 
+% run synchro script
 ECG_Synchro;
 
 emotional = Coincidence(:,:,2);
