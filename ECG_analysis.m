@@ -10,7 +10,7 @@ list_of_files = dir('**/*.txt'); % find all ECG files and create a list
 segments_info = readtable('segments_info.xlsx');
 
 %pairs x conditions x role
-% conditions order: RS1, Emotional, Neutral
+% conditions order: RS1, Emotional, Neutral, RS2, RS3
 % role order: speaker, listener
 Rpeaks = cell(27,5,2);
 HR = zeros(27,5,2);
@@ -57,7 +57,7 @@ for file = 1:size(list_of_files,1)
     elseif file == 37
         d_sharing2 = d_sharing2(d_sharing2<1.8);
     elseif file == 40
-        d_sharing2 = d_sharing2(d_sharing2< 1.4 & d_sharing2>1.4);
+        d_sharing2 = d_sharing2(d_sharing2<1.4 & d_sharing2>-1.4);
         d_RS3 = d_RS3(d_RS3<1.5 & d_RS3>-1.5);
     elseif file == 45
         d_sharing1 = d_sharing1(d_sharing1<1.5 & d_sharing1>-1.5);
@@ -80,7 +80,7 @@ for file = 1:size(list_of_files,1)
         d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
     elseif file == 54
         d_sharing1 = d_sharing1(d_sharing1<1 & d_sharing1>-1);
-             d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1);
+       d_sharing2 = d_sharing2(d_sharing2<1 & d_sharing2>-1);
     end
 
     % find peaks
@@ -132,6 +132,8 @@ for file = 1:size(list_of_files,1)
         Rpeaks(pairCount, 4, 2) = {locs_RS2'/(size(d_RS2,1)/300)};
         Rpeaks(pairCount, 5, 2) = {locs_RS3'/(size(d_RS3,1)/300)};
         HR(pairCount,1,2) = size(locs_RS1,1)/(size(d_RS1,1)/30000);
+        HR(pairCount,4,2) = size(locs_RS2,1)/(size(d_RS2,1)/30000);
+        HR(pairCount,5,2) = size(locs_RS3,1)/(size(d_RS3,1)/30000);
         if char(table2array(segments_info(file, 2))) == 'E'
             emotional_size = [emotional_size size(d_sharing1,1)];
             neutral_size =[neutral_size size(d_sharing2,1)];
